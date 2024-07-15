@@ -1,0 +1,14 @@
+{
+  "name": "alumnati-b",
+  "version": "1.0.0",
+  "description": "AlumniConnect",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.s"
+  },
+  "author": "Ankur Singh",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
