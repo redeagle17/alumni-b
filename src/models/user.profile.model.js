@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const userProfileSchema = new Schema({
+  user_id: {
+    type: String,
+    require: true,
+  },
   firstName: {
     type: String,
     required: true,
@@ -53,7 +57,7 @@ const userProfileSchema = new Schema({
     type: String,
     required: true,
   },
-  image: {
+  profileImage: {
     type: String,
   },
   workExperiences: [
