@@ -17,7 +17,10 @@ app.use(express.static("public"));
 
 
 import userRouter from './routes/user.route.js'
+import UserProfileRouter from './routes/user.profile.route.js'
+
 app.use("/api/v1/users", userRouter)
+app.use("/api/v1/users_data", UserProfileRouter)
 
 app.use(errorMiddleware);
 
