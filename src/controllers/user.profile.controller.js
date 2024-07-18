@@ -83,4 +83,21 @@ const userProfile = asyncHandler(async (req, res, next) => {
     .json(new responseHandler(200, [], "User data added Successfully"));
 });
 
-export { userProfile };
+const getAllUserProfiles = asyncHandler(async (req, res, next) => {
+  
+  const userProfiles = await UserProfile.find();
+  if (!userProfiles) {
+    return next(new errorHandler(404, "Data not found"));
+  }
+  return res
+    .status(200)
+    .json(
+      new responseHandler(
+        200,
+        userProfiles,
+        "User profiles fetched successfully"
+      )
+    );
+});
+
+export { userProfile, getAllUserProfiles };
