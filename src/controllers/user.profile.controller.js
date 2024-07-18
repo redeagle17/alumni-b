@@ -5,6 +5,7 @@ import responseHandler from "../utils/responseHandler.js";
 
 const userProfile = asyncHandler(async(req, res, next) => {
     console.log(req.body);
+    console.log(req.files);
     res
     .status(201)
     .json(
