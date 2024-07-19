@@ -84,7 +84,6 @@ const userProfile = asyncHandler(async (req, res, next) => {
 });
 
 const getAllUserProfiles = asyncHandler(async (req, res, next) => {
-  
   const userProfiles = await UserProfile.find();
   if (!userProfiles) {
     return next(new errorHandler(404, "Data not found"));
@@ -100,4 +99,21 @@ const getAllUserProfiles = asyncHandler(async (req, res, next) => {
     );
 });
 
-export { userProfile, getAllUserProfiles };
+const getSingleUserProfile = asyncHandler(async (req, res, next) => {
+  const { user_id } = req.params;
+  const singleUserProfile = await UserProfile.findOne({ user_id });
+  if (!singleUserProfile) {
+    return next(new errorHandler(404, "User profile not found"));
+  }
+  return res
+    .status(200)
+    .json(
+      new responseHandler(
+        200,
+        singleUserProfile,
+        "User profiles fetched successfully"
+      )
+    );
+});
+
+export { userProfile, getAllUserProfiles, getSingleUserProfile };
