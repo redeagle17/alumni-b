@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 const app = express();
