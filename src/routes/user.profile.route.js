@@ -10,7 +10,7 @@ const router = Router();
 
 router.post(
   "/profile",
-  upload.fields([{ name: "profileImage", maxCount: 1 }]),
+  // upload.fields([{ name: "profileImage", maxCount: 1 }]),
   userProfile
 );
 
