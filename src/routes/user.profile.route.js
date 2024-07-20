@@ -4,12 +4,15 @@ import {
   getAllUserProfiles,
   getSingleUserProfile,
 } from "../controllers/user.profile.controller.js";
-import bodyParser from "body-parser";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
-router.use(bodyParser.json({ limit: "50mb" }));
-router.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-router.post("/profile", userProfile);
+
+router.post(
+  "/profile",
+  upload.fields([{ name: "profileImage", maxCount: 1 }]),
+  userProfile
+);
 
 router.get("/all_users_profile", getAllUserProfiles);
 
