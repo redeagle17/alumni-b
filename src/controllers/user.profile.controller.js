@@ -19,6 +19,7 @@ const userProfile = asyncHandler(async (req, res, next) => {
     college,
     department,
     about,
+    profileImage,
     workExperiences,
   } = req.body;
   console.log(req.body);
@@ -36,16 +37,17 @@ const userProfile = asyncHandler(async (req, res, next) => {
     !college ||
     !department ||
     !about ||
-    !workExperiences
+    !workExperiences ||
+    !profileImage
   ) {
     return next(new errorHandler(400, "All fields are required"));
   }
-  const profileImageLocalPath = req.files?.profileImage[0]?.path;
-  if (!profileImageLocalPath) {
-    return next(new errorHandler(400, "Profile Image is required"));
-  }
-  const profileImage = await uploadOnCloudinary(profileImageLocalPath);
-  if (!profileImage) {
+  // const profileImageLocalPath = req.files?.profileImage[0]?.path;
+  // if (!profileImageLocalPath) {
+  //   return next(new errorHandler(400, "Profile Image is required"));
+  // }
+  const profileImageRes = await uploadOnCloudinary(profileImage);
+  if (!profileImageRes) {
     return next(new errorHandler(400, "Profile Image is required"));
   }
 
@@ -68,7 +70,7 @@ const userProfile = asyncHandler(async (req, res, next) => {
     college,
     department,
     about,
-    profileImage: profileImage.url,
+    profileImage: profileImageRes.url,
     workExperiences: parsedWorkExperiences,
   });
 
