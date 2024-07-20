@@ -5,7 +5,7 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: ["https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app"],
   credentials: true,
   methods: ["POST", "GET"],
   allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
