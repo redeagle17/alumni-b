@@ -4,14 +4,6 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 
 const app = express();
 
-const corsOptions = {
-  origin: ["https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app"],
-  credentials: true,
-  methods: ["POST", "GET"],
-  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
-};
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ limit: "16kb" }));
 app.use(express.static("public"));
