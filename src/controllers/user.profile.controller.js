@@ -21,7 +21,7 @@ const userProfile = asyncHandler(async (req, res, next) => {
     about,
     workExperiences,
   } = req.body;
-
+  console.log(req.body);
   if (
     !user_id ||
     !firstName ||
