@@ -5,10 +5,11 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: [
+  origin:
     "https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app",
-  ],
-  methods: ["POST", "GET"],
+  methods: "POST, GET",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 
