@@ -9,7 +9,6 @@ const corsOptions = {
     "https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app",
   ],
   methods: ["POST", "GET"],
-  credentials: true,
 };
 app.use(cors(corsOptions));
 
