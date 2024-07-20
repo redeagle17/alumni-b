@@ -9,6 +9,13 @@ app.use(
     origin: ["http://localhost:5173"],
     credentials: true,
     methods: ["POST", "GET"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
   })
 );
 
