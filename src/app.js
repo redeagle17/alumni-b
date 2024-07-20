@@ -1,11 +1,21 @@
 import express from "express";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import cors from "cors";
 
 const app = express();
 
-app.use(express.json({ limit: "16kb" }));
-app.use(express.urlencoded({ limit: "16kb" }));
-app.use(express.static("public"));
+const corsOptions = {
+  origin: [
+    "https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app",
+  ],
+  methods: ["POST", "GET"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+app.use(express.json());
+// app.use(express.urlencoded({ limit: "16kb" }));
+// app.use(express.static("public"));
 
 import userRouter from "./routes/user.route.js";
 import UserProfileRouter from "./routes/user.profile.route.js";

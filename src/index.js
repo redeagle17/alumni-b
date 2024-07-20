@@ -1,16 +1,6 @@
 import "dotenv/config";
 import connectDB from "./db/index.js";
 import app from "./app.js";
-import cors from "cors";
-
-const corsOptions = {
-  origin: ["https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app"],
-  credentials: true,
-  methods: ["POST", "GET"],
-  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
-};
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 connectDB()
   .then(() => {
