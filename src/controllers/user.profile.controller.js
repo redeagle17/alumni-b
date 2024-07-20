@@ -105,12 +105,59 @@ const getSingleUserProfile = asyncHandler(async (req, res, next) => {
   if (!singleUserProfile) {
     return next(new errorHandler(404, "User profile not found"));
   }
+  singleUserProfile.workExperiences.sort((a, b) => {
+    if (a.currentWork && !b.currentWork) return -1;
+    if (!a.currentWork && b.currentWork) return 1;
+    return new Date(b.endDate) - new Date(a.endDate);
+  });
+
+  const formatWorkExperience = (experience) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return experience.map((exp) => {
+      const startDate = new Date(exp.startDate);
+      const endDate = exp.currentWork ? null : new Date(exp.endDate);
+
+      const formattedStartDate = `${
+        months[startDate.getMonth()]
+      }-${startDate.getFullYear()}`;
+      const formattedEndDate = exp.currentWork
+        ? "Present"
+        : `${months[endDate.getMonth()]}-${endDate.getFullYear()}`;
+
+      return {
+        position: exp.position,
+        company: exp.company,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        currentWork: exp.currentWork,
+        _id: exp._id,
+      };
+    });
+  };
+  const updatedSingleUserProfile = {
+    ...singleUserProfile.toObject(),
+    workExperiences: formatWorkExperience(singleUserProfile.workExperiences),
+  };
+
   return res
     .status(200)
     .json(
       new responseHandler(
         200,
-        singleUserProfile,
+        updatedSingleUserProfile,
         "User profiles fetched successfully"
       )
     );
