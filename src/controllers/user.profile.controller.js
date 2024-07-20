@@ -3,84 +3,168 @@ import asyncHandler from "../utils/asyncHandler.js";
 import errorHandler from "../utils/errorHandler.js";
 import responseHandler from "../utils/responseHandler.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import formidable from "formidable";
 
 const userProfile = asyncHandler(async (req, res, next) => {
-  const {
-    user_id,
-    firstName,
-    lastName,
-    location,
-    gender,
-    headline,
-    phone,
-    linkedin,
-    github,
-    twitter,
-    college,
-    department,
-    about,
-    workExperiences,
-  } = req.body;
+  // const {
+  //   user_id,
+  //   firstName,
+  //   lastName,
+  //   location,
+  //   gender,
+  //   headline,
+  //   phone,
+  //   linkedin,
+  //   github,
+  //   twitter,
+  //   college,
+  //   department,
+  //   about,
+  //   workExperiences,
+  // } = req.body;
 
-  if (
-    !user_id ||
-    !firstName ||
-    !lastName ||
-    !location ||
-    !gender ||
-    !headline ||
-    !phone ||
-    !linkedin ||
-    !github ||
-    !twitter ||
-    !college ||
-    !department ||
-    !about ||
-    !workExperiences
-  ) {
-    return next(new errorHandler(400, "All fields are required"));
-  }
-  const profileImageLocalPath = req.files?.profileImage[0]?.path;
-  if (!profileImageLocalPath) {
-    return next(new errorHandler(400, "Profile Image is required"));
-  }
-  const profileImage = await uploadOnCloudinary(profileImageLocalPath);
-  if (!profileImage) {
-    return next(new errorHandler(400, "Profile Image is required"));
-  }
+  // if (
+  //   !user_id ||
+  //   !firstName ||
+  //   !lastName ||
+  //   !location ||
+  //   !gender ||
+  //   !headline ||
+  //   !phone ||
+  //   !linkedin ||
+  //   !github ||
+  //   !twitter ||
+  //   !college ||
+  //   !department ||
+  //   !about ||
+  //   !workExperiences
+  // ) {
+  //   return next(new errorHandler(400, "All fields are required"));
+  // }
+  // const profileImageLocalPath = req.files?.profileImage[0]?.path;
+  // if (!profileImageLocalPath) {
+  //   return next(new errorHandler(400, "Profile Image is required"));
+  // }
+  // const profileImage = await uploadOnCloudinary(profileImageLocalPath);
+  // if (!profileImage) {
+  //   return next(new errorHandler(400, "Profile Image is required"));
+  // }
 
-  const parsedWorkExperiences = workExperiences.map((exp) => ({
-    ...exp,
-    currentWork: exp.currentWork === "true" || exp.currentWork === true,
-  }));
+  // const parsedWorkExperiences = workExperiences.map((exp) => ({
+  //   ...exp,
+  //   currentWork: exp.currentWork === "true" || exp.currentWork === true,
+  // }));
 
-  const userProfileData = await UserProfile.create({
-    user_id,
-    firstName,
-    lastName,
-    location,
-    gender,
-    headline,
-    phone,
-    linkedin,
-    github,
-    twitter,
-    college,
-    department,
-    about,
-    profileImage: profileImage.url,
-    workExperiences: parsedWorkExperiences,
+  // const userProfileData = await UserProfile.create({
+  //   user_id,
+  //   firstName,
+  //   lastName,
+  //   location,
+  //   gender,
+  //   headline,
+  //   phone,
+  //   linkedin,
+  //   github,
+  //   twitter,
+  //   college,
+  //   department,
+  //   about,
+  //   profileImage: profileImage.url,
+  //   workExperiences: parsedWorkExperiences,
+  // });
+
+  // if (!userProfileData) {
+  //   return next(
+  //     new errorHandler(500, "Something went wrong! Please try again later")
+  //   );
+  // }
+
+  // return res
+  //   .status(201)
+  //   .json(new responseHandler(200, [], "User data added Successfully"));
+  const form = new formidable.IncomingForm();
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return next(new errorHandler(400, 'Error parsing the form'));
+    }
+
+    const {
+      user_id,
+      firstName,
+      lastName,
+      location,
+      gender,
+      headline,
+      phone,
+      linkedin,
+      github,
+      twitter,
+      college,
+      department,
+      about,
+      workExperiences,
+    } = fields;
+
+    if (
+      !user_id ||
+      !firstName ||
+      !lastName ||
+      !location ||
+      !gender ||
+      !headline ||
+      !phone ||
+      !linkedin ||
+      !github ||
+      !twitter ||
+      !college ||
+      !department ||
+      !about ||
+      !workExperiences
+    ) {
+      return next(new errorHandler(400, 'All fields are required'));
+    }
+
+    const profileImageLocalPath = files.profileImage?.filepath;
+    if (!profileImageLocalPath) {
+      return next(new errorHandler(400, 'Profile Image is required'));
+    }
+
+    let profileImage;
+    try {
+      profileImage = await uploadOnCloudinary(profileImageLocalPath);
+    } catch (error) {
+      return next(new errorHandler(400, 'Profile Image upload failed'));
+    }
+
+    const parsedWorkExperiences = JSON.parse(workExperiences).map((exp) => ({
+      ...exp,
+      currentWork: exp.currentWork === 'true' || exp.currentWork === true,
+    }));
+
+    const userProfileData = await UserProfile.create({
+      user_id,
+      firstName,
+      lastName,
+      location,
+      gender,
+      headline,
+      phone,
+      linkedin,
+      github,
+      twitter,
+      college,
+      department,
+      about,
+      profileImage: profileImage.secure_url,
+      workExperiences: parsedWorkExperiences,
+    });
+
+    if (!userProfileData) {
+      return next(new errorHandler(500, 'Something went wrong! Please try again later'));
+    }
+
+    return res.status(201).json(new responseHandler(200, [], 'User data added Successfully'));
   });
-
-  if (!userProfileData) {
-    return next(
-      new errorHandler(500, "Something went wrong! Please try again later")
-    );
-  }
-
-  return res
-    .status(201)
-    .json(new responseHandler(200, [], "User data added Successfully"));
 });
 
 const getAllUserProfiles = asyncHandler(async (req, res, next) => {
