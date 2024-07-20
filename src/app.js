@@ -5,8 +5,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin:
-    "https://alumniconnectfrontend-8n00frrxw-ankur-singhs-projects-b0407e94.vercel.app",
+  origin: "https://alumini-f.vercel.app",
   methods: "POST, GET",
   credential: true,
 };
