@@ -2,7 +2,6 @@ import { UserProfile } from "../models/user.profile.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import errorHandler from "../utils/errorHandler.js";
 import responseHandler from "../utils/responseHandler.js";
-import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const userProfile = asyncHandler(async (req, res, next) => {
   const {
