@@ -10,6 +10,7 @@ const corsOptions = {
   methods: "POST, GET",
   preflightContinue: false,
   optionsSuccessStatus: 204,
+  credential: true,
 };
 app.use(cors(corsOptions));
 
